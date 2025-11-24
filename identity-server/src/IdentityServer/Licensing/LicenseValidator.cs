@@ -5,12 +5,10 @@
 #nullable disable
 
 using System.Security.Claims;
-using System.Security.Cryptography;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.JsonWebTokens;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Duende;
+#pragma warning disable CA1822
 
 // shared APIs needed for Duende license validation
 internal class LicenseValidator<T>
@@ -57,6 +55,7 @@ internal class LicenseValidator<T>
         DebugLog = LogToDebug;
     }
 
+    /*
     private static string LoadFromFile()
     {
         foreach (var name in LicenseFileNames)
@@ -70,6 +69,7 @@ internal class LicenseValidator<T>
 
         return null;
     }
+    */
 
     protected void ValidateLicense()
     {

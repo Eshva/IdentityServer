@@ -1,11 +1,13 @@
 // Copyright (c) Duende Software. All rights reserved.
 // See LICENSE in the project root for license information.
 
-using System.Globalization;
 using System.Security.Claims;
 using Duende.Bff.DynamicFrontends;
 using Duende.Private.Licensing;
 using Microsoft.Extensions.Logging;
+
+#pragma warning disable CA1822
+#pragma warning disable CS9113 // Parameter is unread.
 
 namespace Duende.Bff.Licensing;
 
@@ -17,7 +19,7 @@ internal class LicenseValidator(ILogger<LicenseValidator> logger, BffLicense lic
 
     }
 
-    private bool? _licenseCheckResult = true;
+    // private bool? _licenseCheckResult = true;
 
     public bool IsValid()
     {
@@ -30,46 +32,46 @@ internal class LicenseValidator(ILogger<LicenseValidator> logger, BffLicense lic
         return true;
     }
 
-    private bool CheckLicense()
-    {
-
-        // if (!license.IsConfigured)
-        // {
-        //     logger.NoValidLicense(LogLevel.Error);
-        //     return false;
-        // }
-        //
-        // if (license.Expiration <= timeProvider.GetUtcNow())
-        // {
-        //     logger.LicenseHasExpired(LogLevel.Error, license.Expiration, license.ContactInfo, license.CompanyName);
-        //     return false;
-        // }
-        //
-        // if (!license.BffFeature)
-        // {
-        //     logger.NotLicensedForBff(LogLevel.Error, license.ContactInfo, license.CompanyName);
-        //     return false;
-        // }
-        //
-        // logger.LicenseDetails(
-        //     LogLevel.Debug,
-        //     license.Edition.ToString(),
-        //     license.Expiration,
-        //     license.ContactInfo,
-        //     license.CompanyName,
-        //     license.FrontendLimit switch
-        //     {
-        //         null => "not licensed for multi-frontend feature",
-        //         0 => "not licensed for multi-frontend feature",
-        //         -1 => "unlimited",
-        //         > 0 => license.FrontendLimit.Value.ToString(CultureInfo.InvariantCulture),
-        //         // Should't happen, but just in case
-        //         _ => "not licensed for multi-frontend feature"
-        //     });
-        //
-        // return true;
-        return true;
-    }
+    // private bool CheckLicense()
+    // {
+    //
+    //     if (!license.IsConfigured)
+    //     {
+    //         logger.NoValidLicense(LogLevel.Error);
+    //         return false;
+    //     }
+    //
+    //     if (license.Expiration <= timeProvider.GetUtcNow())
+    //     {
+    //         logger.LicenseHasExpired(LogLevel.Error, license.Expiration, license.ContactInfo, license.CompanyName);
+    //         return false;
+    //     }
+    //
+    //     if (!license.BffFeature)
+    //     {
+    //         logger.NotLicensedForBff(LogLevel.Error, license.ContactInfo, license.CompanyName);
+    //         return false;
+    //     }
+    //
+    //     logger.LicenseDetails(
+    //         LogLevel.Debug,
+    //         license.Edition.ToString(),
+    //         license.Expiration,
+    //         license.ContactInfo,
+    //         license.CompanyName,
+    //         license.FrontendLimit switch
+    //         {
+    //             null => "not licensed for multi-frontend feature",
+    //             0 => "not licensed for multi-frontend feature",
+    //             -1 => "unlimited",
+    //             > 0 => license.FrontendLimit.Value.ToString(CultureInfo.InvariantCulture),
+    //             // Should't happen, but just in case
+    //             _ => "not licensed for multi-frontend feature"
+    //         });
+    //
+    //     return true;
+    //     return true;
+    // }
 
     public void LogFrontendAdded(BffFrontendName frontendName, int frontendCount)
     {
@@ -91,6 +93,8 @@ internal class LicenseValidator(ILogger<LicenseValidator> logger, BffLicense lic
         //     return;
         // }
 
+#pragma warning disable CS8629 // Nullable value type may be null.
         logger.FrontendAdded(LogLevel.Debug, frontendName, frontendCount, license.FrontendLimit.Value);
+#pragma warning restore CS8629 // Nullable value type may be null.
     }
 }

@@ -7,6 +7,8 @@
 using Duende.IdentityServer.Configuration;
 using Microsoft.Extensions.Logging;
 
+#pragma warning disable CA1822
+
 namespace Duende.IdentityServer;
 
 // APIs needed for IdentityServer specific license validation
@@ -64,36 +66,36 @@ internal class IdentityServerLicenseValidator : LicenseValidator<IdentityServerL
         // }
     }
 
-    private static void EnsureAdded(ref HashSet<string> hashSet, object lockObject, string key)
-    {
-        // Lock free test first.
-        if (!hashSet.Contains(key))
-        {
-            lock (lockObject)
-            {
-                // Check again after lock, to quite early if another thread
-                // already did the job.
-                if (!hashSet.Contains(key))
-                {
-                    // The HashSet is not thread safe. And we don't want to lock for every single
-                    // time we use it. Our access pattern should be a lot of reads and a few writes
-                    // so better to create a new copy every time we need to add a value.
-                    var newSet = new HashSet<string>(hashSet)
-                    {
-                        key
-                    };
-
-                    // Reference assignment is atomic so non-locked readers will handle this.
-                    hashSet = newSet;
-                }
-            }
-        }
-    }
+    // private static void EnsureAdded(ref HashSet<string> hashSet, object lockObject, string key)
+    // {
+    //     // Lock free test first.
+    //     if (!hashSet.Contains(key))
+    //     {
+    //         lock (lockObject)
+    //         {
+    //             // Check again after lock, to quite early if another thread
+    //             // already did the job.
+    //             if (!hashSet.Contains(key))
+    //             {
+    //                 // The HashSet is not thread safe. And we don't want to lock for every single
+    //                 // time we use it. Our access pattern should be a lot of reads and a few writes
+    //                 // so better to create a new copy every time we need to add a value.
+    //                 var newSet = new HashSet<string>(hashSet)
+    //                 {
+    //                     key
+    //                 };
+    //
+    //                 // Reference assignment is atomic so non-locked readers will handle this.
+    //                 hashSet = newSet;
+    //             }
+    //         }
+    //     }
+    // }
 
     public void ValidateClient(string clientId) => ValidateClient(clientId, License);
 
-    private HashSet<string> _clientIds = new();
-    private object _clientIdLock = new();
+    // private HashSet<string> _clientIds = new();
+    // private object _clientIdLock = new();
 
     // Internal method that takes license as parameter to allow testing
     internal void ValidateClient(string clientId, IdentityServerLicense license)
@@ -117,8 +119,8 @@ internal class IdentityServerLicenseValidator : LicenseValidator<IdentityServerL
         // }
     }
 
-    private HashSet<string> _issuers = new();
-    private object _issuerLock = new();
+    // private HashSet<string> _issuers = new();
+    // private object _issuerLock = new();
 
     public void ValidateIssuer(string iss) => ValidateIssuer(iss, License);
 
@@ -144,7 +146,7 @@ internal class IdentityServerLicenseValidator : LicenseValidator<IdentityServerL
         // }
     }
 
-    private bool ValidateServerSideSessionsWarned;
+    // private bool ValidateServerSideSessionsWarned;
     public void ValidateServerSideSessions()
     {
         // if (License != null)
@@ -161,7 +163,7 @@ internal class IdentityServerLicenseValidator : LicenseValidator<IdentityServerL
         // }
     }
 
-    private bool CanUseDPoPWarned;
+    // private bool CanUseDPoPWarned;
     public void ValidateDPoP()
     {
         // if (License != null)
@@ -178,7 +180,7 @@ internal class IdentityServerLicenseValidator : LicenseValidator<IdentityServerL
         // }
     }
 
-    private bool ValidateResourceIndicatorsWarned;
+    // private bool ValidateResourceIndicatorsWarned;
     public void ValidateResourceIndicators(string resourceIndicator)
     {
         // if (!string.IsNullOrWhiteSpace(resourceIndicator))
@@ -198,7 +200,7 @@ internal class IdentityServerLicenseValidator : LicenseValidator<IdentityServerL
         // }
     }
 
-    private bool ValidateParWarned;
+    // private bool ValidateParWarned;
     public void ValidatePar()
     {
         // if (License != null)
@@ -234,7 +236,7 @@ internal class IdentityServerLicenseValidator : LicenseValidator<IdentityServerL
         // }
     }
 
-    private bool ValidateDynamicProvidersWarned;
+    // private bool ValidateDynamicProvidersWarned;
     public void ValidateDynamicProviders()
     {
         // if (License != null)
@@ -251,7 +253,7 @@ internal class IdentityServerLicenseValidator : LicenseValidator<IdentityServerL
         // }
     }
 
-    private bool ValidateCibaWarned;
+    // private bool ValidateCibaWarned;
     public void ValidateCiba()
     {
         // if (License != null)
