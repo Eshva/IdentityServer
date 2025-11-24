@@ -14,11 +14,11 @@ namespace Duende;
 internal class LicenseValidator<T>
     where T : License, new()
 {
-    private static readonly string[] LicenseFileNames = new[]
-    {
-        "Duende_License.key",
-        "Duende_IdentityServer_License.key",
-    };
+    // private static readonly string[] LicenseFileNames = new[]
+    // {
+    //     "Duende_License.key",
+    //     "Duende_IdentityServer_License.key",
+    // };
 
     protected ILogger Logger;
     protected Action<string, object[]> ErrorLog;

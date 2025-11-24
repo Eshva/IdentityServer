@@ -3,12 +3,10 @@
 
 
 #nullable disable
+#pragma warning disable CA1822
 
 using System.Security.Claims;
-using System.Security.Cryptography;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.JsonWebTokens;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Duende;
 
@@ -16,11 +14,11 @@ namespace Duende;
 internal class LicenseValidator<T>
     where T : License, new()
 {
-    private static readonly string[] LicenseFileNames = new[]
-    {
-        "Duende_License.key",
-        "Duende_IdentityServer_License.key",
-    };
+    // private static readonly string[] LicenseFileNames = new[]
+    // {
+    //     "Duende_License.key",
+    //     "Duende_IdentityServer_License.key",
+    // };
 
     protected ILogger Logger;
     protected Action<string, object[]> ErrorLog;
@@ -55,19 +53,19 @@ internal class LicenseValidator<T>
         DebugLog = LogToDebug;
     }
 
-    private static string LoadFromFile()
-    {
-        foreach (var name in LicenseFileNames)
-        {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), name);
-            if (File.Exists(path))
-            {
-                return File.ReadAllText(path).Trim();
-            }
-        }
-
-        return null;
-    }
+    // private static string LoadFromFile()
+    // {
+    //     foreach (var name in LicenseFileNames)
+    //     {
+    //         var path = Path.Combine(Directory.GetCurrentDirectory(), name);
+    //         if (File.Exists(path))
+    //         {
+    //             return File.ReadAllText(path).Trim();
+    //         }
+    //     }
+    //
+    //     return null;
+    // }
 
     protected void ValidateLicense()
     {
