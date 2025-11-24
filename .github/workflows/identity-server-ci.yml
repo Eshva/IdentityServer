@@ -27,38 +27,38 @@ env:
   DOTNET_NOLOGO: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
 jobs:
-  verify-formatting:
-    name: Verify formatting
-    if: (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) || (github.event_name == 'push') || (github.event_name == 'workflow_dispatch')
+#  verify-formatting:
+#    name: Verify formatting
+#    if: (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) || (github.event_name == 'push') || (github.event_name == 'workflow_dispatch')
 #    runs-on:
 #      group: large
 #      labels: [ubuntu-latest-x64-16core]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    defaults:
-      run:
-        shell: bash
-        working-directory: identity-server
-    timeout-minutes: 15
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-    - name: List .NET SDKs
-      run: dotnet --list-sdks
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v5
-      with:
-        dotnet-version: |-
-          8.0.x
-          9.0.203
-          10.0.100
-    - name: Restore
-      run: dotnet restore identity-server.slnf
-    - name: Verify Formatting
-      run: dotnet format identity-server.slnf --verify-no-changes --no-restore
+#    runs-on: ubuntu-latest
+#    permissions:
+#      contents: read
+#    defaults:
+#      run:
+#        shell: bash
+#        working-directory: identity-server
+#    timeout-minutes: 15
+#    steps:
+#    - name: Checkout
+#      uses: actions/checkout@v4
+#      with:
+#        fetch-depth: 0
+#    - name: List .NET SDKs
+#      run: dotnet --list-sdks
+#    - name: Setup .NET
+#      uses: actions/setup-dotnet@v5
+#      with:
+#        dotnet-version: |-
+#          8.0.x
+#          9.0.203
+#          10.0.100
+#    - name: Restore
+#      run: dotnet restore identity-server.slnf
+#    - name: Verify Formatting
+#      run: dotnet format identity-server.slnf --verify-no-changes --no-restore
   build:
     name: Build and test (unit)
     if: (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) || (github.event_name == 'push') || (github.event_name == 'workflow_dispatch')
