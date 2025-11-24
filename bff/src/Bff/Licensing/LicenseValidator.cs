@@ -21,16 +21,17 @@ internal class LicenseValidator(ILogger<LicenseValidator> logger, BffLicense lic
 
     // private bool? _licenseCheckResult = true;
 
-    public bool IsValid()
-    {
-        // if (_licenseCheckResult != null)
-        // {
-        //     return _licenseCheckResult.Value;
-        // }
-        // _licenseCheckResult = CheckLicense();
-        // return _licenseCheckResult.Value;
-        return true;
-    }
+    public bool IsValid() => true;
+    // public bool IsValid()
+    // {
+    //     if (_licenseCheckResult != null)
+    //     {
+    //         return _licenseCheckResult.Value;
+    //     }
+    //     _licenseCheckResult = CheckLicense();
+    //     return _licenseCheckResult.Value;
+    //     return true;
+    // }
 
     // private bool CheckLicense()
     // {
@@ -73,28 +74,30 @@ internal class LicenseValidator(ILogger<LicenseValidator> logger, BffLicense lic
     //     return true;
     // }
 
-    public void LogFrontendAdded(BffFrontendName frontendName, int frontendCount)
-    {
-        // if (license?.FrontendLimit == null)
-        // {
-        //     logger.NotLicensedForMultiFrontend(LogLevel.Error, frontendName);
-        //     return;
-        // }
-        // if (license.FrontendLimit == -1)
-        // {
-        //     // unlimited frontends
-        //     logger.UnlimitedFrontends(LogLevel.Debug, frontendName, frontendCount);
-        //     return;
-        // }
-        //
-        // if (license.FrontendLimit < frontendCount)
-        // {
-        //     logger.FrontendLimitExceeded(LogLevel.Error, frontendName, frontendCount, license.FrontendLimit.Value);
-        //     return;
-        // }
-
 #pragma warning disable CS8629 // Nullable value type may be null.
+    public void LogFrontendAdded(BffFrontendName frontendName, int frontendCount) =>
         logger.FrontendAdded(LogLevel.Debug, frontendName, frontendCount, license.FrontendLimit.Value);
 #pragma warning restore CS8629 // Nullable value type may be null.
-    }
+//     public void LogFrontendAdded(BffFrontendName frontendName, int frontendCount)
+//     {
+//         if (license?.FrontendLimit == null)
+//         {
+//             logger.NotLicensedForMultiFrontend(LogLevel.Error, frontendName);
+//             return;
+//         }
+//         if (license.FrontendLimit == -1)
+//         {
+//             // unlimited frontends
+//             logger.UnlimitedFrontends(LogLevel.Debug, frontendName, frontendCount);
+//             return;
+//         }
+//
+//         if (license.FrontendLimit < frontendCount)
+//         {
+//             logger.FrontendLimitExceeded(LogLevel.Error, frontendName, frontendCount, license.FrontendLimit.Value);
+//             return;
+//         }
+//
+//         logger.FrontendAdded(LogLevel.Debug, frontendName, frontendCount, license.FrontendLimit.Value);
+//     }
 }

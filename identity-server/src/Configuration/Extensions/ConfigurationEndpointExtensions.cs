@@ -2,13 +2,9 @@
 // See LICENSE in the project root for license information.
 
 
-using Duende.IdentityServer.Configuration.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace Duende.IdentityServer.Configuration;
 
@@ -17,7 +13,7 @@ namespace Duende.IdentityServer.Configuration;
 /// </summary>
 public static class ConfigurationEndpointExtensions
 {
-    internal static bool _licenseChecked = true;
+    // internal static bool _licenseChecked = true;
 
     /// <summary>
     /// Maps the dynamic client registration endpoint.
