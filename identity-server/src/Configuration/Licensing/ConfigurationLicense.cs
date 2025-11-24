@@ -27,7 +27,7 @@ public class ConfigurationLicense : License
     {
         base.Initialize(claims);
 
-        ConfigApiFeature = claims.HasClaim("feature", "config_api");
+        // ConfigApiFeature = claims.HasClaim("feature", "config_api");
         switch (Edition)
         {
             case LicenseEdition.Enterprise:

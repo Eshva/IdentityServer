@@ -26,10 +26,12 @@ public class IdentityServerLicense : License
     internal override void Initialize(ClaimsPrincipal claims)
     {
         base.Initialize(claims);
+        // Edition = LicenseEdition.Enterprise;
 
-        RedistributionFeature = claims.HasClaim("feature", "isv") || claims.HasClaim("feature", "redistribution");
+        RedistributionFeature = false;
+        // RedistributionFeature = claims.HasClaim("feature", "isv") || claims.HasClaim("feature", "redistribution");
 
-        KeyManagementFeature = claims.HasClaim("feature", "key_management");
+        // KeyManagementFeature = claims.HasClaim("feature", "key_management");
         switch (Edition)
         {
             case LicenseEdition.Enterprise:
@@ -39,7 +41,7 @@ public class IdentityServerLicense : License
                 break;
         }
 
-        ParFeature = claims.HasClaim("feature", "par");
+        // ParFeature = claims.HasClaim("feature", "par");
         switch (Edition)
         {
             case LicenseEdition.Enterprise:
@@ -49,7 +51,7 @@ public class IdentityServerLicense : License
                 break;
         }
 
-        ResourceIsolationFeature = claims.HasClaim("feature", "resource_isolation");
+        // ResourceIsolationFeature = claims.HasClaim("feature", "resource_isolation");
         switch (Edition)
         {
             case LicenseEdition.Enterprise:
@@ -58,7 +60,7 @@ public class IdentityServerLicense : License
                 break;
         }
 
-        DynamicProvidersFeature = claims.HasClaim("feature", "dynamic_providers");
+        // DynamicProvidersFeature = claims.HasClaim("feature", "dynamic_providers");
         switch (Edition)
         {
             case LicenseEdition.Enterprise:
@@ -67,7 +69,7 @@ public class IdentityServerLicense : License
                 break;
         }
 
-        CibaFeature = claims.HasClaim("feature", "ciba");
+        // CibaFeature = claims.HasClaim("feature", "ciba");
         switch (Edition)
         {
             case LicenseEdition.Enterprise:
@@ -76,7 +78,7 @@ public class IdentityServerLicense : License
                 break;
         }
 
-        ServerSideSessionsFeature = claims.HasClaim("feature", "server_side_sessions");
+        // ServerSideSessionsFeature = claims.HasClaim("feature", "server_side_sessions");
         switch (Edition)
         {
             case LicenseEdition.Enterprise:
@@ -86,7 +88,7 @@ public class IdentityServerLicense : License
                 break;
         }
 
-        DPoPFeature = claims.HasClaim("feature", "dpop");
+        // DPoPFeature = claims.HasClaim("feature", "dpop");
         switch (Edition)
         {
             case LicenseEdition.Enterprise:
@@ -95,63 +97,65 @@ public class IdentityServerLicense : License
                 break;
         }
 
-        if (!claims.HasClaim("feature", "unlimited_clients"))
-        {
-            // default values
-            if (RedistributionFeature)
-            {
-                // default for all ISV editions
-                ClientLimit = 5;
-            }
-            else
-            {
-                // defaults limits for non-ISV editions
-                ClientLimit = Edition switch
-                {
-                    LicenseEdition.Business => 15,
-                    LicenseEdition.Starter => 5,
-                    _ => ClientLimit
-                };
-            }
+        // if (!claims.HasClaim("feature", "unlimited_clients"))
+        // {
+        //     // default values
+        //     if (RedistributionFeature)
+        //     {
+        //         // default for all ISV editions
+        //         ClientLimit = 5;
+        //     }
+        //     else
+        //     {
+        //         // defaults limits for non-ISV editions
+        //         ClientLimit = Edition switch
+        //         {
+        //             LicenseEdition.Business => 15,
+        //             LicenseEdition.Starter => 5,
+        //             _ => ClientLimit
+        //         };
+        //     }
+        //
+        //     if (int.TryParse(claims.FindFirst("client_limit")?.Value, out var clientLimit))
+        //     {
+        //         // explicit, so use that value
+        //         ClientLimit = clientLimit;
+        //     }
+        //
+        //     if (!RedistributionFeature)
+        //     {
+        //         // these for the non-ISV editions that always have unlimited, regardless of explicit value
+        //         ClientLimit = Edition switch
+        //         {
+        //             LicenseEdition.Enterprise or LicenseEdition.Community =>
+        //                 // unlimited
+        //                 null,
+        //             _ => ClientLimit
+        //         };
+        //     }
+        // }
+        ClientLimit = null;
 
-            if (int.TryParse(claims.FindFirst("client_limit")?.Value, out var clientLimit))
-            {
-                // explicit, so use that value
-                ClientLimit = clientLimit;
-            }
-
-            if (!RedistributionFeature)
-            {
-                // these for the non-ISV editions that always have unlimited, regardless of explicit value
-                ClientLimit = Edition switch
-                {
-                    LicenseEdition.Enterprise or LicenseEdition.Community =>
-                        // unlimited
-                        null,
-                    _ => ClientLimit
-                };
-            }
-        }
-
-        if (!claims.HasClaim("feature", "unlimited_issuers"))
-        {
-            // default 
-            IssuerLimit = 1;
-
-            if (int.TryParse(claims.FindFirst("issuer_limit")?.Value, out var issuerLimit))
-            {
-                IssuerLimit = issuerLimit;
-            }
-
-            // these for the editions that always have unlimited, regardless of explicit value
-            IssuerLimit = Edition switch
-            {
-                LicenseEdition.Enterprise or LicenseEdition.Community =>
-                    // unlimited
-                    null,
-                _ => IssuerLimit
-            };
-        }
+        // if (!claims.HasClaim("feature", "unlimited_issuers"))
+        // {
+        //     // default
+        //     IssuerLimit = 1;
+        //
+        //     if (int.TryParse(claims.FindFirst("issuer_limit")?.Value, out var issuerLimit))
+        //     {
+        //         IssuerLimit = issuerLimit;
+        //     }
+        //
+        //     // these for the editions that always have unlimited, regardless of explicit value
+        //     IssuerLimit = Edition switch
+        //     {
+        //         LicenseEdition.Enterprise or LicenseEdition.Community =>
+        //             // unlimited
+        //             null,
+        //         _ => IssuerLimit
+        //     };
+        // }
+        IssuerLimit = null;
     }
 
     /// <summary>

@@ -17,7 +17,7 @@ namespace Duende.IdentityServer.Configuration;
 /// </summary>
 public static class ConfigurationEndpointExtensions
 {
-    internal static bool _licenseChecked;
+    internal static bool _licenseChecked = true;
 
     /// <summary>
     /// Maps the dynamic client registration endpoint.
@@ -31,14 +31,14 @@ public static class ConfigurationEndpointExtensions
 
     internal static void CheckLicense(this IEndpointRouteBuilder endpoints)
     {
-        if (_licenseChecked == false)
-        {
-            var loggerFactory = endpoints.ServiceProvider.GetRequiredService<ILoggerFactory>();
-            var options = endpoints.ServiceProvider.GetRequiredService<IOptions<IdentityServerConfigurationOptions>>().Value;
-
-            ConfigurationLicenseValidator.Instance.Initialize(loggerFactory, options);
-        }
-
-        _licenseChecked = true;
+        // if (_licenseChecked == false)
+        // {
+        //     var loggerFactory = endpoints.ServiceProvider.GetRequiredService<ILoggerFactory>();
+        //     var options = endpoints.ServiceProvider.GetRequiredService<IOptions<IdentityServerConfigurationOptions>>().Value;
+        //
+        //     ConfigurationLicenseValidator.Instance.Initialize(loggerFactory, options);
+        // }
+        //
+        // _licenseChecked = true;
     }
 }

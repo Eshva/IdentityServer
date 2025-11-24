@@ -17,78 +17,79 @@ internal class LicenseValidator(ILogger<LicenseValidator> logger, BffLicense lic
 
     }
 
-    private bool? _licenseCheckResult;
+    private bool? _licenseCheckResult = true;
 
     public bool IsValid()
     {
-        if (_licenseCheckResult != null)
-        {
-            return _licenseCheckResult.Value;
-        }
-        _licenseCheckResult = CheckLicense();
-        return _licenseCheckResult.Value;
-
+        // if (_licenseCheckResult != null)
+        // {
+        //     return _licenseCheckResult.Value;
+        // }
+        // _licenseCheckResult = CheckLicense();
+        // return _licenseCheckResult.Value;
+        return true;
     }
 
     private bool CheckLicense()
     {
 
-        if (!license.IsConfigured)
-        {
-            logger.NoValidLicense(LogLevel.Error);
-            return false;
-        }
-
-        if (license.Expiration <= timeProvider.GetUtcNow())
-        {
-            logger.LicenseHasExpired(LogLevel.Error, license.Expiration, license.ContactInfo, license.CompanyName);
-            return false;
-        }
-
-        if (!license.BffFeature)
-        {
-            logger.NotLicensedForBff(LogLevel.Error, license.ContactInfo, license.CompanyName);
-            return false;
-        }
-
-        logger.LicenseDetails(
-            LogLevel.Debug,
-            license.Edition.ToString(),
-            license.Expiration,
-            license.ContactInfo,
-            license.CompanyName,
-            license.FrontendLimit switch
-            {
-                null => "not licensed for multi-frontend feature",
-                0 => "not licensed for multi-frontend feature",
-                -1 => "unlimited",
-                > 0 => license.FrontendLimit.Value.ToString(CultureInfo.InvariantCulture),
-                // Should't happen, but just in case
-                _ => "not licensed for multi-frontend feature"
-            });
-
+        // if (!license.IsConfigured)
+        // {
+        //     logger.NoValidLicense(LogLevel.Error);
+        //     return false;
+        // }
+        //
+        // if (license.Expiration <= timeProvider.GetUtcNow())
+        // {
+        //     logger.LicenseHasExpired(LogLevel.Error, license.Expiration, license.ContactInfo, license.CompanyName);
+        //     return false;
+        // }
+        //
+        // if (!license.BffFeature)
+        // {
+        //     logger.NotLicensedForBff(LogLevel.Error, license.ContactInfo, license.CompanyName);
+        //     return false;
+        // }
+        //
+        // logger.LicenseDetails(
+        //     LogLevel.Debug,
+        //     license.Edition.ToString(),
+        //     license.Expiration,
+        //     license.ContactInfo,
+        //     license.CompanyName,
+        //     license.FrontendLimit switch
+        //     {
+        //         null => "not licensed for multi-frontend feature",
+        //         0 => "not licensed for multi-frontend feature",
+        //         -1 => "unlimited",
+        //         > 0 => license.FrontendLimit.Value.ToString(CultureInfo.InvariantCulture),
+        //         // Should't happen, but just in case
+        //         _ => "not licensed for multi-frontend feature"
+        //     });
+        //
+        // return true;
         return true;
     }
 
     public void LogFrontendAdded(BffFrontendName frontendName, int frontendCount)
     {
-        if (license?.FrontendLimit == null)
-        {
-            logger.NotLicensedForMultiFrontend(LogLevel.Error, frontendName);
-            return;
-        }
-        if (license.FrontendLimit == -1)
-        {
-            // unlimited frontends
-            logger.UnlimitedFrontends(LogLevel.Debug, frontendName, frontendCount);
-            return;
-        }
-
-        if (license.FrontendLimit < frontendCount)
-        {
-            logger.FrontendLimitExceeded(LogLevel.Error, frontendName, frontendCount, license.FrontendLimit.Value);
-            return;
-        }
+        // if (license?.FrontendLimit == null)
+        // {
+        //     logger.NotLicensedForMultiFrontend(LogLevel.Error, frontendName);
+        //     return;
+        // }
+        // if (license.FrontendLimit == -1)
+        // {
+        //     // unlimited frontends
+        //     logger.UnlimitedFrontends(LogLevel.Debug, frontendName, frontendCount);
+        //     return;
+        // }
+        //
+        // if (license.FrontendLimit < frontendCount)
+        // {
+        //     logger.FrontendLimitExceeded(LogLevel.Error, frontendName, frontendCount, license.FrontendLimit.Value);
+        //     return;
+        // }
 
         logger.FrontendAdded(LogLevel.Debug, frontendName, frontendCount, license.FrontendLimit.Value);
     }

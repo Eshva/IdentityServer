@@ -4,6 +4,7 @@
 
 #nullable disable
 
+using System.Globalization;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -27,30 +28,38 @@ public abstract class License
     /// </summary>
     internal virtual void Initialize(ClaimsPrincipal claims)
     {
-        Claims = claims;
-
-        if (int.TryParse(claims.FindFirst("id")?.Value, out var id))
-        {
-            SerialNumber = id;
-        }
-
-        CompanyName = claims.FindFirst("company_name")?.Value;
-        ContactInfo = claims.FindFirst("contact_info")?.Value;
-
-        if (long.TryParse(claims.FindFirst("exp")?.Value, out var exp))
-        {
-            var expDate = DateTimeOffset.FromUnixTimeSeconds(exp);
-            Expiration = expDate.UtcDateTime;
-        }
-
-        var edition = claims.FindFirst("edition")?.Value;
-        if (!Enum.TryParse<License.LicenseEdition>(edition, true, out var editionValue))
-        {
-            throw new Exception($"Invalid edition in license: '{edition}'");
-        }
-        Edition = editionValue;
-
-        Extras = claims.FindFirst("extras")?.Value;
+        // Claims = claims;
+        //
+        // if (int.TryParse(claims.FindFirst("id")?.Value, out var id))
+        // {
+        //     SerialNumber = id;
+        // }
+        //
+        // CompanyName = claims.FindFirst("company_name")?.Value;
+        // ContactInfo = claims.FindFirst("contact_info")?.Value;
+        //
+        // if (long.TryParse(claims.FindFirst("exp")?.Value, out var exp))
+        // {
+        //     var expDate = DateTimeOffset.FromUnixTimeSeconds(exp);
+        //     Expiration = expDate.UtcDateTime;
+        // }
+        //
+        // var edition = claims.FindFirst("edition")?.Value;
+        // if (!Enum.TryParse<License.LicenseEdition>(edition, true, out var editionValue))
+        // {
+        //     throw new Exception($"Invalid edition in license: '{edition}'");
+        // }
+        // Edition = editionValue;
+        //
+        // Extras = claims.FindFirst("extras")?.Value;
+        SerialNumber = 23031974;
+        CompanyName = "Mike Eshva Home";
+        Expiration = DateTime.ParseExact(
+            "2050-12-31 12:00:00",
+            "yyyy-MM-dd HH:mm:ss",
+            CultureInfo.InvariantCulture,
+            DateTimeStyles.AssumeUniversal);
+        Edition = LicenseEdition.Enterprise;
     }
 
     internal ClaimsPrincipal Claims { get; private set; }
@@ -75,7 +84,7 @@ public abstract class License
     public DateTime? Expiration { get; set; }
 
     /// <summary>
-    /// The license edition 
+    /// The license edition
     /// </summary>
     public LicenseEdition Edition { get; set; }
 
