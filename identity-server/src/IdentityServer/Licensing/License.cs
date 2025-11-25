@@ -52,6 +52,7 @@ public abstract class License
         // Edition = editionValue;
         //
         // Extras = claims.FindFirst("extras")?.Value;
+        Claims = claims;
         SerialNumber = 23031974;
         CompanyName = "Mike Eshva Home";
         Expiration = DateTime.ParseExact(
