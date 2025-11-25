@@ -5,6 +5,7 @@
 
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Security.Claims;
 
 namespace Duende.IdentityServer.Licensing.V2;
@@ -26,94 +27,104 @@ internal class License
     /// </summary>
     internal License(ClaimsPrincipal claims)
     {
-        if (int.TryParse(claims.FindFirst("id")?.Value, out var id))
-        {
-            SerialNumber = id;
-        }
-
-        CompanyName = claims.FindFirst("company_name")?.Value;
-        ContactInfo = claims.FindFirst("contact_info")?.Value;
-
-        if (long.TryParse(claims.FindFirst("exp")?.Value, out var exp))
-        {
-            Expiration = DateTimeOffset.FromUnixTimeSeconds(exp);
-        }
-
-        var edition = claims.FindFirstValue("edition");
-        if (edition != null)
-        {
-            if (!Enum.TryParse<LicenseEdition>(edition, true, out var editionValue))
-            {
-                throw new Exception($"Invalid edition in license: '{edition}'");
-            }
-
-            Edition = editionValue;
-        }
-
-        Features = claims.FindAll("feature").Select(f => f.Value).ToArray();
-
-        Extras = claims.FindFirst("extras")?.Value ?? string.Empty;
-
-        // IsConfigured needs to be set prior to checking for clients and issuers claims or the Redistribution check will not return an appropriate value
+        SerialNumber = 23031974;
+        CompanyName = "Mike Eshva Home";
+        Expiration = DateTime.ParseExact(
+            "2050-12-31 12:00:00",
+            "yyyy-MM-dd HH:mm:ss",
+            CultureInfo.InvariantCulture,
+            DateTimeStyles.AssumeUniversal);
+        Edition = LicenseEdition.Enterprise;
         IsConfigured = true;
 
-        if (!claims.HasClaim("feature", "unlimited_clients"))
-        {
-            // default values
-            if (Redistribution)
-            {
-                // default for all ISV editions
-                ClientLimit = 5;
-            }
-            else
-            {
-                // defaults limits for non-ISV editions
-                ClientLimit = Edition switch
-                {
-                    LicenseEdition.Business => 15,
-                    LicenseEdition.Starter => 5,
-                    _ => ClientLimit
-                };
-            }
-
-            if (int.TryParse(claims.FindFirst("client_limit")?.Value, out var clientLimit))
-            {
-                // explicit, so use that value
-                ClientLimit = clientLimit;
-            }
-
-            if (!Redistribution)
-            {
-                // these for the non-ISV editions that always have unlimited, regardless of explicit value
-                ClientLimit = Edition switch
-                {
-                    LicenseEdition.Enterprise or LicenseEdition.Community =>
-                        // unlimited
-                        null,
-                    _ => ClientLimit
-                };
-            }
-        }
-
-        if (!claims.HasClaim("feature", "unlimited_issuers"))
-        {
-            // default
-            IssuerLimit = 1;
-
-            if (int.TryParse(claims.FindFirst("issuer_limit")?.Value, out var issuerLimit))
-            {
-                IssuerLimit = issuerLimit;
-            }
-
-            // these for the editions that always have unlimited, regardless of explicit value
-            IssuerLimit = Edition switch
-            {
-                LicenseEdition.Enterprise or LicenseEdition.Community =>
-                    // unlimited
-                    null,
-                _ => IssuerLimit
-            };
-        }
+        // if (int.TryParse(claims.FindFirst("id")?.Value, out var id))
+        // {
+        //     SerialNumber = id;
+        // }
+        //
+        // CompanyName = claims.FindFirst("company_name")?.Value;
+        // ContactInfo = claims.FindFirst("contact_info")?.Value;
+        //
+        // if (long.TryParse(claims.FindFirst("exp")?.Value, out var exp))
+        // {
+        //     Expiration = DateTimeOffset.FromUnixTimeSeconds(exp);
+        // }
+        //
+        // var edition = claims.FindFirstValue("edition");
+        // if (edition != null)
+        // {
+        //     if (!Enum.TryParse<LicenseEdition>(edition, true, out var editionValue))
+        //     {
+        //         throw new Exception($"Invalid edition in license: '{edition}'");
+        //     }
+        //
+        //     Edition = editionValue;
+        // }
+        //
+        // Features = claims.FindAll("feature").Select(f => f.Value).ToArray();
+        //
+        // Extras = claims.FindFirst("extras")?.Value ?? string.Empty;
+        //
+        // // IsConfigured needs to be set prior to checking for clients and issuers claims or the Redistribution check will not return an appropriate value
+        // IsConfigured = true;
+        //
+        // if (!claims.HasClaim("feature", "unlimited_clients"))
+        // {
+        //     // default values
+        //     if (Redistribution)
+        //     {
+        //         // default for all ISV editions
+        //         ClientLimit = 5;
+        //     }
+        //     else
+        //     {
+        //         // defaults limits for non-ISV editions
+        //         ClientLimit = Edition switch
+        //         {
+        //             LicenseEdition.Business => 15,
+        //             LicenseEdition.Starter => 5,
+        //             _ => ClientLimit
+        //         };
+        //     }
+        //
+        //     if (int.TryParse(claims.FindFirst("client_limit")?.Value, out var clientLimit))
+        //     {
+        //         // explicit, so use that value
+        //         ClientLimit = clientLimit;
+        //     }
+        //
+        //     if (!Redistribution)
+        //     {
+        //         // these for the non-ISV editions that always have unlimited, regardless of explicit value
+        //         ClientLimit = Edition switch
+        //         {
+        //             LicenseEdition.Enterprise or LicenseEdition.Community =>
+        //                 // unlimited
+        //                 null,
+        //             _ => ClientLimit
+        //         };
+        //     }
+        // }
+        //
+        // if (!claims.HasClaim("feature", "unlimited_issuers"))
+        // {
+        //     // default
+        //     IssuerLimit = 1;
+        //
+        //     if (int.TryParse(claims.FindFirst("issuer_limit")?.Value, out var issuerLimit))
+        //     {
+        //         IssuerLimit = issuerLimit;
+        //     }
+        //
+        //     // these for the editions that always have unlimited, regardless of explicit value
+        //     IssuerLimit = Edition switch
+        //     {
+        //         LicenseEdition.Enterprise or LicenseEdition.Community =>
+        //             // unlimited
+        //             null,
+        //         _ => IssuerLimit
+        //     };
+        // }
     }
 
     /// <summary>
